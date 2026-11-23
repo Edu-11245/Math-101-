@@ -15,11 +15,9 @@
 .qrow{display:flex;justify-content:space-between;gap:2.5em;font-size:1.15em;font-weight:800;direction:ltr}
 .qrow .a{color:var(--teal)}
 .lines>div{margin:.3em 0}
-/* مشاهد المحتوى فقط؛ أبعاد الشاشة نفسها من main.css بدون أي تعديل */
 .chapter{display:none;grid-template-columns:auto auto;gap:1em 3.5em;align-items:center;justify-items:center;width:max-content;text-align:center}
 .chapter.active{display:grid}
 .chapter.one{grid-template-columns:auto}
-/* عنوان كل مشهد: شريط ثابت فوق المحتوى بدل ما يبقى طاير */
 .chapter>.cap:first-child{grid-column:1/-1;justify-self:stretch;font-size:1.45em;font-weight:800;color:#fff;background:var(--ink);border-radius:.55em;padding:.3em 1.4em;margin-bottom:.4em;box-shadow:0 .15em .5em #14213d33}
 #intro .L{display:grid;grid-template-columns:auto auto;gap:.1em 1.2em;justify-items:center;align-items:center;justify-self:stretch;padding-bottom:.6em;border-bottom:.1em solid var(--line)}
 #intro .L .cap{grid-column:1/-1}
@@ -44,7 +42,6 @@
 <body>
 <script src="../../../../main.js"></script>
 <script>
-/* حركة نقل الأس بنفس أسلوب الصفحة الأصلية */
 function arc(from,to,dur=1100){
   const sc=document.querySelector('#scene'),a=sc.querySelector(from),b=sc.querySelector(to);
   if(!a||!b)return;
@@ -59,8 +56,6 @@ function arc(from,to,dur=1100){
     {duration:sc.classList.contains('instant')?0:dur,easing:'ease-in-out',fill:'forwards'});
   an.onfinish=()=>{g.remove();b.classList.remove('hid')};
 }
-
-/* تغيير المشهد الداخلي وإعادة حساب حجمه بنفس معادلة main.js الأصلية */
 function activateChapter(sc,id){
   sc.querySelectorAll('.chapter').forEach(el=>el.classList.remove('active'));
   const next=sc.querySelector('#'+id);
@@ -71,7 +66,6 @@ function activateChapter(sc,id){
     fit.style.transform=`scale(${k})`;
   }
 }
-
 Lesson({
   title:{ar:'القاعدة الأساسية',en:'Basic Rule'},
   scenes:[
