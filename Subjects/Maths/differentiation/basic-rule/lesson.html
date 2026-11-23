@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Basic Rule | القاعدة الأساسية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../main.css">
+<style>
+.title{font-size:3.6em;font-weight:800}
+.pill{display:inline-block;white-space:nowrap;font-size:.95em;font-weight:600;padding:.3em 1.1em;border-radius:2em;color:#fff;box-shadow:0 .15em .4em #14213d33}
+.s1{background:var(--pen)}.s2{background:var(--teal)}
+.n{color:var(--pen)}.m{color:var(--teal)}
+.card{background:#fff;border:.1em solid var(--line);border-radius:.8em;padding:.6em 1.3em;box-shadow:0 .2em .7em #14213d18;text-align:center}
+.qrow{display:flex;justify-content:space-between;gap:2.5em;font-size:1.15em;font-weight:800;direction:ltr}
+.qrow .a{color:var(--teal)}
+.lines>div{margin:.3em 0}
+/* مشاهد المحتوى فقط؛ أبعاد الشاشة نفسها من main.css بدون أي تعديل */
+.chapter{display:none;grid-template-columns:auto auto;gap:1em 3.5em;align-items:center;justify-items:center;width:max-content;text-align:center}
+.chapter.active{display:grid}
+.chapter.one{grid-template-columns:auto}
+/* عنوان كل مشهد: شريط ثابت فوق المحتوى بدل ما يبقى طاير */
+.chapter>.cap:first-child{grid-column:1/-1;justify-self:stretch;font-size:1.45em;font-weight:800;color:#fff;background:var(--ink);border-radius:.55em;padding:.3em 1.4em;margin-bottom:.4em;box-shadow:0 .15em .5em #14213d33}
+#intro .L{display:grid;grid-template-columns:auto auto;gap:.1em 1.2em;justify-items:center;align-items:center;justify-self:stretch;padding-bottom:.6em;border-bottom:.1em solid var(--line)}
+#intro .L .cap{grid-column:1/-1}
+#intro .L .title{font-size:3.2em}
+#intro .L #introEnglish{font-size:2.2em!important}
+.L,.R{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.9em}
+.R .card{max-width:19em;line-height:1.7;font-size:1.05em}
+.chapter .row{gap:1.2em}
+.card,.cap,.pill,.timer-card,.row{direction:rtl}
+.eq,.qrow,.eq *{direction:ltr}
+.R .row{flex-wrap:nowrap}
+.R .card{max-width:21em}
+#intro .R{display:grid;grid-template-columns:auto auto;gap:.9em 1.2em;align-items:stretch}
+#intro .R .card{max-width:none;display:flex;flex-direction:column;justify-content:center;gap:.3em}
+#intro .R .row{flex-wrap:wrap}
+.explain{font-size:1.1em;font-weight:700;line-height:1.7;text-align:center}
+.timer-card{min-width:9em;border:.12em solid var(--hi);border-radius:.8em;padding:.7em 1.2em;background:#fff;text-align:center;box-shadow:0 .2em .7em #14213d18}
+.timer-number{font-size:3.4em;line-height:1.1;font-weight:800;color:var(--pen);font-variant-numeric:tabular-nums}
+.timer-label{font-size:1em;font-weight:700;color:var(--ink)}
+</style>
+</head>
+<body>
+<script src="../../../../main.js"></script>
+<script>
+/* حركة نقل الأس بنفس أسلوب الصفحة الأصلية */
+function arc(from,to,dur=1100){
+  const sc=document.querySelector('#scene'),a=sc.querySelector(from),b=sc.querySelector(to);
+  if(!a||!b)return;
+  const ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect(),cs=getComputedStyle(a);
+  const k=a.offsetWidth?ra.width/a.offsetWidth:1,fa=parseFloat(cs.fontSize)*k,fb=parseFloat(getComputedStyle(b).fontSize)*k,s=fb/fa;
+  const g=a.cloneNode(true);g.removeAttribute('id');g.classList.remove('hid');
+  Object.assign(g.style,{position:'fixed',left:ra.left+'px',top:ra.top+'px',margin:0,fontSize:fa+'px',lineHeight:1,zIndex:5,transition:'none'});
+  sc.append(g);
+  const dx=rb.left+rb.width/2-ra.left-ra.width/2,dy=rb.top+rb.height/2-ra.top-fa/2;
+  a.classList.add('dim');
+  const an=g.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${dx/2}px,${dy/2-70}px) scale(${1+s/2})`,offset:.5},{transform:`translate(${dx}px,${dy}px) scale(${s})`}],
+    {duration:sc.classList.contains('instant')?0:dur,easing:'ease-in-out',fill:'forwards'});
+  an.onfinish=()=>{g.remove();b.classList.remove('hid')};
+}
+
+/* تغيير المشهد الداخلي وإعادة حساب حجمه بنفس معادلة main.js الأصلية */
+function activateChapter(sc,id){
+  sc.querySelectorAll('.chapter').forEach(el=>el.classList.remove('active'));
+  const next=sc.querySelector('#'+id);
+  if(next)next.classList.add('active');
+  const fit=sc.querySelector('#fit');
+  if(fit&&fit.offsetWidth){
+    const k=Math.min(1.6,sc.clientWidth*.94/fit.offsetWidth,sc.clientHeight*.84/fit.offsetHeight);
+    fit.style.transform=`scale(${k})`;
+  }
+}
+
+Lesson({
+  title:{ar:'القاعدة الأساسية',en:'Basic Rule'},
+  scenes:[
+  {
+    title:{ar:'شرح قاعدة القوة',en:'The Power Rule'},
+    audio:'Power Rule(1)',
+    dur:334416,
+    say:'شرح صوتي كامل باللهجة المصرية. استخدم زرار Script من المشغل الأصلي لعرض ملخص الدرس، وأزرار التشغيل والإيقاف والتقديم للتحكم في الصوت والأنيميشن معًا.',
+    stage:`
+      <!-- المقدمة -->
+      <div class="chapter one active" id="intro">
+        <div class="L">
+          <div class="title hid" id="introTitle">قاعدة القوة</div>
+          <div class="title hid" id="introEnglish" style="font-size:2.4em;color:var(--teal)">The Power Rule</div>
+          <div class="cap hid" id="introCap">التفاضل | Differentiation</div>
+        </div>
+        <div class="R">
+          <div class="card hid" id="introChange">
+            <div class="cap">يعني إيه تفاضل؟</div>
+            <div class="eq sm">الدالة بتتغير بمعدل قد إيه؟</div>
+          </div>
+          <div class="card hid" id="introValues">
+            <div class="row"><span class="box">x</span><span>→</span><span class="box">قيمة</span><span>→</span><span class="box">قيمة تانية</span></div>
+            <div class="cap">الدالة بتربط قيمة بقيمة تانية</div>
+          </div>
+          <div class="card hid" id="introDerivative">
+            <div class="cap">الناتج اسمه المشتقة | Derivative</div>
+            <div class="eq md">f′(x)</div>
+          </div>
+          <div class="card hid" id="introVariables">
+            <div class="cap">أي متغير مرفوع لأس</div>
+            <div class="eq md">x<sup class="n">n</sup> &nbsp; y<sup class="n">n</sup> &nbsp; z<sup class="n">n</sup></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- قاعدة القوة -->
+      <div class="chapter" id="rule">
+        <div class="cap">القاعدة الأساسية | The Power Rule</div>
+        <div class="L">
+          <div class="eq md" id="ruleInput">f(x) = x<sup id="ruleN" class="n">n</sup></div>
+          <div class="eq md hid" id="ruleDerivative">f′(x) = <span id="ruleCoeff" class="n hid">n·</span>x<sup id="rulePower" class="m hid">n − 1</sup></div>
+          <div class="card hid" id="ruleFinal"><div class="cap">القانون النهائي</div><div class="eq md">f′(x) = <span class="n">n</span> · x<sup class="m">n − 1</sup></div></div>
+        </div>
+        <div class="R">
+          <div class="card hid" id="nExplain">الـ n دي رمز الأس، وممكن تكون 3 أو 4 أو 5 أو أي رقم</div>
+          <div class="row hid" id="ruleStep1"><span class="pill s1">1 — ننزّل الأس</span><span class="cap">نكتب الأس قدام الـ x</span></div>
+          <div class="card hid" id="coefExplain">الأس اللي فوق الـ x بننزّله جنبها كأنه معامل | Coefficient</div>
+          <div class="row hid" id="ruleStep2"><span class="pill s2">2 — نطرح واحد</span><span class="cap">n ناقص واحد</span></div>
+        </div>
+      </div>
+
+      <!-- المثال الأول -->
+      <div class="chapter" id="example1">
+        <div class="cap">مثال 1</div>
+        <div class="L">
+          <div class="eq">f(x) = x<sup class="n">3</sup></div>
+          <div class="card hid" id="ex1Final"><div class="cap">3 ناقص 1 = 2</div><div class="eq">3x<sup class="m">2</sup></div></div>
+        </div>
+        <div class="R">
+          <div class="card hid" id="ex1Power">الأس هنا هو 3</div>
+          <div class="row hid" id="ex1Step"><span class="pill s1">ننزل الـ 3</span><div class="eq sm">3x<sup class="m">3 − 1</sup></div></div>
+        </div>
+      </div>
+
+      <!-- المثال الثاني -->
+      <div class="chapter" id="example2">
+        <div class="cap">مثال 2 — وجود معامل</div>
+        <div class="L">
+          <div class="eq">f(x) = <span class="n">4</span>x<sup class="m">5</sup></div>
+          <div class="card hid" id="ex2Final"><div class="cap">المشتقة النهائية</div><div class="eq"><span class="n">20</span>x<sup class="m">4</sup></div></div>
+        </div>
+        <div class="R">
+          <div class="card hid" id="ex2Explain">ننزل الأس ونضربه في المعامل الموجود قدام الـ x</div>
+          <div class="card hid" id="ex2Subtract"><div class="cap">نطرح واحد من الأس</div><div class="eq sm">5 − 1 = 4</div></div>
+          <div class="card hid" id="ex2Multiply"><div class="eq sm"><span class="n">5</span> × <span class="n">4</span> = <span class="hl">20</span></div><div class="cap">الخمسة في الأربعة = عشرين</div></div>
+        </div>
+      </div>
+
+      <!-- الحالة الخاصة الأولى: x -->
+      <div class="chapter" id="caseX">
+        <div class="cap">الحالة الأولى: x من غير أس مكتوب</div>
+        <div class="L">
+          <div class="eq">f(x) = x = x<sup class="n">1</sup></div>
+          <div class="card hid" id="caseXFinal"><div class="cap">إذن مشتقة x</div><div class="eq">f′(x) = <span class="hl">1</span></div></div>
+        </div>
+        <div class="R">
+          <div class="card hid" id="caseXStep1"><div class="eq sm">1 · x<sup class="m">1 − 1</sup></div></div>
+          <div class="card hid" id="caseXStep2"><div class="eq sm">1 · x<sup class="m">0</sup> = 1</div><div class="cap">أي رقم أس صفر بيساوي واحد</div></div>
+        </div>
+      </div>
+
+      <!-- الحالة الخاصة للمعامل مع x -->
+      <div class="chapter" id="caseAX">
+        <div class="cap">لما يكون عندنا معامل مضروب في x</div>
+        <div class="L">
+          <div class="card">
+            <div class="row hid" id="case2x"><div class="eq sm">2x</div><div class="eq sm">→</div><div class="eq sm hl">2</div></div>
+            <div class="row hid" id="case3x"><div class="eq sm">3x</div><div class="eq sm">→</div><div class="eq sm hl">3</div></div>
+            <div class="row hid" id="case5x"><div class="eq sm">5x</div><div class="eq sm">→</div><div class="eq sm hl">5</div></div>
+            <div class="row hid" id="caseAXGeneral"><div class="eq sm">ax</div><div class="eq sm">→</div><div class="eq sm hl">a</div></div>
+          </div>
+        </div>
+        <div class="R">
+          <div class="card hid" id="caseAXNote">الـ x أسها 1، مشتقتها 1، والمعامل بيفضل زي ما هو</div>
+        </div>
+      </div>
+
+      <!-- الحالة الخاصة الثانية: الثابت -->
+      <div class="chapter" id="constant">
+        <div class="cap">الحالة الثانية: الرقم الثابت | Constant</div>
+        <div class="L">
+          <div class="eq">f(x) = 7</div>
+          <div class="card hid" id="constantResult"><div class="cap">مشتقة أي رقم ثابت</div><div class="eq">f′(x) = <span class="hl">0</span></div></div>
+        </div>
+        <div class="R">
+          <div class="card hid" id="constantWhy">عشان مفيش x، ومفيش حاجة بتغير الدالة</div>
+        </div>
+      </div>
+
+      <!-- التدريب ووقفة الثلاثين ثانية -->
+      <div class="chapter" id="exercise">
+        <div class="cap">جرّب بنفسك | Your turn</div>
+        <div class="L">
+          <div class="card">
+            <div class="qrow"><span>1) f(x) = x<sup>7</sup></span><span class="a hid" id="exerciseQ1">؟</span></div>
+            <div class="qrow hid" id="exerciseQ2"><span>2) f(x) = 2x<sup>4</sup></span><span class="a">؟</span></div>
+            <div class="qrow hid" id="exerciseQ3"><span>3) f(x) = 5x<sup>3</sup></span><span class="a">؟</span></div>
+          </div>
+        </div>
+        <div class="R">
+          <div class="pill s1 hid" id="exercisePrompt">جرب التلات مسائل دول وحلهم</div>
+          <div class="timer-card hid" id="exerciseTimer">
+            <div class="timer-number" id="timerNum">30</div>
+            <div class="timer-label">ثانية للحل — خد وقتك</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- الإجابات -->
+      <div class="chapter one" id="answers">
+        <div class="cap">الإجابات</div>
+        <div class="card">
+          <div class="qrow"><span>1) x<sup>7</sup></span><span class="a hid" id="answer1">7x<sup>6</sup></span></div>
+          <div class="qrow"><span>2) 2x<sup>4</sup></span><span class="a hid" id="answer2">8x<sup>3</sup></span></div>
+          <div class="qrow"><span>3) 5x<sup>3</sup></span><span class="a hid" id="answer3">15x<sup>2</sup></span></div>
+        </div>
+      </div>
+
+      <!-- المراجعة -->
+      <div class="chapter" id="review">
+        <div class="cap">مراجعة سريعة</div>
+        <div class="L">
+          <div class="row"><span class="pill s1">1 — ننزّل الأس</span><span class="pill s2">2 — نطرح 1</span></div>
+          <div class="eq md">f′(x) = <span class="n">n</span> · x<sup class="m">n − 1</sup></div>
+        </div>
+        <div class="R">
+          <div class="card" id="reviewCases">
+            <div class="row"><span class="cap">مشتقة x = 1</span><span class="cap">مشتقة الثابت = 0</span></div>
+          </div>
+          <div class="title" style="font-size:2.2em;color:var(--teal)">The Power Rule</div>
+        </div>
+      </div>
+    `,
+    steps:[
+      /* 00:00–00:49.638 المقدمة */
+      {t:1338,show:'#introTitle',fx:['#introTitle','pop']},
+      {t:4398,show:'#introEnglish'},
+      {t:7038,show:'#introCap'},
+      {t:14678,show:'#introChange'},
+      {t:17698,show:'#introValues'},
+      {t:27858,show:'#introDerivative'},
+      {t:40998,show:'#introVariables'},
+
+      /* 00:49.638–01:54.678 القاعدة */
+      {t:49638,run:sc=>activateChapter(sc,'rule')},
+      {t:54458,show:'#nExplain'},
+      {t:63218,show:'#ruleDerivative'},
+      {t:68018,show:'#ruleStep1'},
+      {t:71878,run:()=>arc('#ruleN','#ruleCoeff')},
+      {t:80778,show:'#coefExplain'},
+      {t:88718,show:'#ruleStep2'},
+      {t:92718,show:'#rulePower',fx:['#rulePower','pop']},
+      {t:102698,show:'#ruleFinal',fx:['#ruleFinal','pop']},
+
+      /* 01:54.678–02:18.477 المثال الأول */
+      {t:114678,run:sc=>activateChapter(sc,'example1')},
+      {t:124858,show:'#ex1Power'},
+      {t:129697,show:'#ex1Step'},
+      {t:133838,show:'#ex1Final',fx:['#ex1Final','pop']},
+
+      /* 02:18.477–02:53.654 المثال الثاني */
+      {t:138477,run:sc=>activateChapter(sc,'example2')},
+      {t:148597,show:'#ex2Explain'},
+      {t:157938,show:'#ex2Subtract'},
+      {t:165738,show:'#ex2Multiply',fx:['#ex2Multiply','pop']},
+      {t:169097,show:'#ex2Final',fx:['#ex2Final','pop']},
+
+      /* 02:53.654–03:25.054 الحالة الأولى */
+      {t:173654,run:sc=>activateChapter(sc,'caseX')},
+      {t:193374,show:'#caseXStep1'},
+      {t:199454,show:'#caseXStep2'},
+      {t:203054,show:'#caseXFinal',fx:['#caseXFinal','pop']},
+
+      /* 03:25.054–03:47.534 معاملات x */
+      {t:205054,run:sc=>activateChapter(sc,'caseAX')},
+      {t:210054,show:'#case2x'},
+      {t:213474,show:'#case3x'},
+      {t:215794,show:'#case5x'},
+      {t:218154,show:'#caseAXGeneral'},
+      {t:218154,show:'#caseAXNote'},
+
+      /* 03:47.534–04:02.074 الثابت */
+      {t:227534,run:sc=>activateChapter(sc,'constant')},
+      {t:234854,show:'#constantWhy'},
+      {t:237054,show:'#constantResult',fx:['#constantResult','pop']},
+
+      /* 04:02.074–04:16.694 التدريب */
+      {t:242074,run:sc=>activateChapter(sc,'exercise')},
+      {t:244174,show:'#exerciseQ1'},
+      {t:247353,show:'#exerciseQ2'},
+      {t:248654,show:'#exerciseQ3'},
+      {t:251614,show:'#exercisePrompt'},
+      {t:256694,show:'#exerciseTimer',text:['#timerNum','30'],hold:30000}, /* الصوت يقف 30 ثانية وتيك تك، وبعدها يكمل */
+      ...Array.from({length:30},(_,i)=>({t:257694+i*1000,text:['#timerNum',String(29-i)]})),
+
+      /* بعد الوقفة: وقت التايم لاين = وقت الصوت + 30 ثانية */
+      {t:287374,run:sc=>activateChapter(sc,'answers')},
+      {t:293794,show:'#answer1',fx:['#answer1','pop']},
+      {t:300814,show:'#answer2',fx:['#answer2','pop']},
+      {t:310214,show:'#answer3',fx:['#answer3','pop']},
+
+      /* المراجعة والنهاية */
+      {t:314914,run:sc=>activateChapter(sc,'review')},
+      {t:316534,fx:['#reviewCases','pulse']}
+    ]
+  }
+  ]
+});
+</script>
+</body>
+</html>
