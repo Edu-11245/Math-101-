@@ -33,6 +33,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 #list button:hover{background:var(--hi)}
 #list .n{font-weight:800;color:var(--pen);min-width:30px}
 #list p{font-size:13px;padding:8px;line-height:1.8}
+/* ---- home ---- */
 .home #app{max-width:760px;margin:0 auto;padding:16px}
 .home h1{font-size:22px;margin-bottom:8px}
 .home h2{font-size:17px;color:var(--teal);margin-top:10px}
@@ -41,6 +42,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .grid a{padding:7px 12px;background:#fff;border:1px solid var(--line);border-radius:8px;color:var(--ink);text-decoration:none;font-size:14px;font-weight:600}
 .grid a:hover{background:var(--hi)}
 a.btn{text-decoration:none}
+/* ---- helpers for lesson content ---- */
 #scene *{transition:opacity .5s,transform .5s,background .3s,color .3s}
 .hid{opacity:0;visibility:hidden;transform:translateY(.4em)}
 .eq{font-size:4.2em;font-weight:800;direction:ltr;line-height:1.2}
@@ -60,6 +62,8 @@ sub{font-size:.55em;line-height:0}
 @keyframes pulse{50%{transform:scale(1.12);color:var(--pen)}}
 .instant *{transition:none!important;animation:none!important}
 @media (prefers-reduced-motion:reduce){#scene *{transition:none}.fx-pop,.fx-shake,.fx-pulse{animation:none}}
+
+/* ---- full-screen stage (override) ---- */
 main{padding:0;gap:0;align-items:stretch;justify-content:stretch}
 #stage{flex:1;width:100%;aspect-ratio:auto;border-radius:0;box-shadow:none;font-size:min(3.73cqh,5cqw);
  background-color:#F4F8FB;background-image:linear-gradient(#cddbe6 1px,transparent 1px),linear-gradient(90deg,#cddbe6 1px,transparent 1px);background-size:7cqh 7cqh;background-blend-mode:normal}

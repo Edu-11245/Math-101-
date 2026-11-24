@@ -10,6 +10,8 @@ const IC={prev:['M6 5v14M19 5L9 12l10 7z'],next:['M18 5v14M5 5l10 7L5 19z'],play
   vol2:['M11 5L6 9H3v6h3l5 4zM15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13']};
 const icon=n=>`<svg viewBox="0 0 24 24" fill="${IC[n][1]?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="${IC[n][0]}"/></svg>`;
 const set=(el,n)=>el.innerHTML=icon(n);
+
+/* ---------- الصفحة الرئيسية ---------- */
 function home(){
   document.body.classList.add('home');
   const list=window.LESSON_LIST||[],g={};
@@ -19,6 +21,8 @@ function home(){
     ls.map(l=>`<a href="Subjects/${s}/${u}/${l.lesson}/lesson.html">${l.title}</a>`).join('')+'</div>').join('')+'</section>').join('')
     :'<p>مفيش دروس لسه. ضيف سطر في Subjects/list.js</p>');
 }
+
+/* ---------- صفحة الدرس ---------- */
 function player(L){
   document.body.classList.add('player');
   document.body.insertAdjacentHTML('afterbegin',`
@@ -42,6 +46,7 @@ function player(L){
   $$('[data-i]').forEach(b=>set(b,b.dataset.i));set($('#start'),'play');
 
   const A=new Audio();A.preload='auto';
+  /* ---- التحكم في الصوت ---- */
   let vol=1,muted=false;
   try{const v=parseFloat(localStorage.getItem('lessonVol'));if(v>=0&&v<=1)vol=v;muted=localStorage.getItem('lessonMuted')==='1'}catch(e){}
   function applyVol(){
@@ -54,8 +59,11 @@ function player(L){
   }
   function setVol(v){vol=Math.max(0,Math.min(1,v));muted=vol===0;applyVol()}
   function toggleMute(){if(muted||vol===0){muted=false;if(vol===0)vol=.5}else muted=true;applyVol()}
+
   const S={i:0,steps:[],k:0,mode:'audio',pos:0,dur:0,end:0,playing:false,rate:1,last:0,ff:false,holds:[],hi:0,off:0,holding:false,hStart:0,hEnd:0,lastSec:-1};
   const N=L.scenes.length;
+
+  /* ---- صوت تيك تك (بدون ملفات) ---- */
   let AC=null,tk=0;
   function beep(){
     try{
@@ -67,6 +75,7 @@ function player(L){
       o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+.07);
     }catch(e){}
   }
+
   function fit(){
     const f=$('#fit'),s=$('#scene');if(!f||!f.offsetWidth)return;
     const k=Math.min(1.6,s.clientWidth*.94/f.offsetWidth,s.clientHeight*.84/f.offsetHeight);
