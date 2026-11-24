@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sum Rule | قاعدة المجموع</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Amiri:wght@400;700&family=Amiri+Quran&family=STIX+Two+Text:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../main.css">
+<style>
+.title{font-size:3.6em;font-weight:800;line-height:1.25}
+.pill{display:inline-block;white-space:nowrap;font-size:.95em;font-weight:600;padding:.3em 1.1em;border-radius:2em;color:#fff;box-shadow:0 .15em .4em #14213d33}
+.s1{background:var(--pen)}.s2{background:var(--teal)}.s3{background:var(--ink)}
+.n{color:var(--pen)}.m{color:var(--teal)}.ib{display:inline-block}.op{display:inline-block;margin:0 .12em}
+.card{background:#fff;border:.1em solid var(--line);border-radius:.8em;padding:.6em 1.3em;box-shadow:0 .2em .7em #14213d18;text-align:center}
+.chapter{display:none;grid-template-columns:auto auto;gap:1em 3.5em;align-items:center;justify-items:center;width:max-content;text-align:center;position:relative}
+.chapter.active{display:grid}.chapter.one{grid-template-columns:auto}
+.chapter>.cap:first-child{grid-column:1/-1;justify-self:stretch;font-size:1.45em;font-weight:800;color:#fff;background:var(--ink);border-radius:.55em;padding:.3em 1.4em;margin-bottom:.4em;box-shadow:0 .15em .5em #14213d33}
+.L,.R{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.9em}
+.R .card{max-width:21em;line-height:1.7;font-size:1.05em}
+.card,.cap,.pill,.row{direction:rtl}
+.eq,.qr,.eq *{direction:ltr}
+/* الخط: Cairo للعربي + خط رياضي STIX للمعادلات */
+.eq{font-family:'STIX Two Text','Cambria Math','Times New Roman',serif;font-weight:600;letter-spacing:.01em}
+.eq i{font-style:italic}
+.qr{display:flex;gap:.7em;align-items:baseline;margin:.25em 0;font-weight:800}
+.qr>span:first-child{font-family:Cairo;color:var(--teal)}
+/* حركات إضافية */
+@keyframes drop{0%{transform:translateY(-1.8em) scale(.6);opacity:0}60%{transform:translateY(.15em) scale(1.1);opacity:1}100%{transform:none}}
+@keyframes slide{from{transform:translateX(3em);opacity:0}to{transform:none;opacity:1}}
+@keyframes zoom{from{transform:scale(.3) rotate(-6deg);opacity:0}70%{transform:scale(1.08)}to{transform:none;opacity:1}}
+@keyframes write{from{clip-path:inset(-30% 0 -30% 100%)}to{clip-path:inset(-30% 0 -30% 0)}}
+@keyframes flip{50%{transform:rotateX(90deg) scale(1.5);color:var(--pen)}}
+@keyframes flash{0%,100%{background:transparent}30%{background:var(--hi)}}
+@keyframes bounce{40%{transform:translateY(-.25em) scale(1.12)}70%{transform:translateY(.05em)}}
+@keyframes glow{50%{opacity:1}}
+@keyframes tw{50%{opacity:.95;transform:scale(1.5) rotate(45deg)}}
+@keyframes fl{to{transform:translateY(-.8em) rotate(8deg)}}
+.fx-drop{animation:drop .8s cubic-bezier(.3,1.4,.5,1)}.fx-slide{animation:slide .7s ease-out}.fx-zoom{animation:zoom .9s}
+.fx-write{animation:write 1.3s ease-out both}.fx-flip{animation:flip .7s}.fx-flash{animation:flash .9s}.fx-bounce{animation:bounce .7s}.fx-glow::after{animation:glow 1.6s 2}
+/* مقدمة */
+.hello{font:700 3.4em/1.3 Amiri,Cairo,serif;color:var(--teal)}
+.badge{font-size:1em;font-weight:700;color:var(--ink);background:var(--hi);padding:.2em 1.2em;border-radius:2em}
+.fl{position:absolute;font:600 1.7em 'STIX Two Text',serif;color:var(--teal);opacity:.2;animation:fl 5s ease-in-out infinite alternate}
+/* الدعاء */
+.dua{position:relative;overflow:hidden;padding:1em 2.4em 1.2em;border-radius:1.2em;min-width:21em;background:radial-gradient(circle at 50% 0,#264a8a,var(--ink) 70%);border:.14em solid var(--hi);outline:.07em solid #ffd23f88;outline-offset:.3em;box-shadow:0 0 2em #ffd23f44,0 .4em 1.4em #14213d66}
+.dua::after{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 2.5em #ffd23fbb;opacity:0;pointer-events:none}
+.dua .lbl{display:inline-block;font-size:.9em;font-weight:700;color:var(--ink);background:var(--hi);padding:.15em 1.2em;border-radius:2em;margin-bottom:.4em}
+.dl{font:400 2.2em/1.85 'Amiri Quran',Amiri,serif;color:var(--hi);text-shadow:0 0 .5em #ffd23f77;direction:rtl;white-space:nowrap;}
+.dl .w{display:inline-block}
+@keyframes wd{from{opacity:0;transform:translateY(.5em) scale(.85)}60%{transform:translateY(-.08em) scale(1.06)}to{opacity:1;transform:none}}
+.fx-words .w{animation:wd .7s cubic-bezier(.2,1.2,.4,1) both;animation-delay:calc(var(--i)*.3s)}
+.sp{will-change:transform,opacity;position:absolute;width:.55em;height:.55em;background:var(--hi);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);opacity:0;animation:tw 2.6s ease-in-out infinite}
+/* الحدود */
+.tm{display:inline-block;position:relative;padding:0 .2em;border-radius:.3em}
+.bd{position:absolute;left:0;right:0;top:-1.3em;margin:0 auto;width:1.8em;height:1.8em;border-radius:50%;color:#fff;font:700 .3em/1.8em Cairo;text-align:center}
+.sumrow{display:flex;align-items:center;gap:.15em}
+#scene .sumrow{transition:gap .9s}
+#scene .sumrow .tm{transition:background .6s}
+.sumrow.split{gap:.9em}.sumrow.split .tm{background:#fff;box-shadow:0 .1em .4em #14213d33}
+.tbl{display:grid;grid-template-columns:repeat(7,auto);gap:.7em .3em;align-items:center;justify-items:center}
+.tbl2{display:grid;grid-template-columns:auto auto auto auto auto;gap:.5em .2em;align-items:center;justify-items:start}
+.tbl2>.q{justify-self:end;margin-inline-end:.4em}
+/* التايمر */
+.salat{position:absolute;left:0;top:34%;z-index:6;pointer-events:none;padding:.5em 2.4em .5em 1.1em;background:var(--teal);color:#fff;font:700 clamp(15px,3.2cqh,26px)/1.4 Amiri,Cairo,serif;clip-path:polygon(0 0,calc(100% - 1.3em) 0,100% 50%,calc(100% - 1.3em) 100%,0 100%);border-left:.35em solid var(--hi);transform:translateX(-120%);direction:rtl;will-change:transform}
+.timer{display:flex;flex-direction:column;align-items:center;gap:.3em;font-weight:700}
+.rg{position:relative;width:7em;height:7em;display:grid;place-items:center}
+.rg svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.rg circle{stroke-width:7}.rg .bg{fill:#fff;stroke:var(--line)}
+.rg .fg{fill:none;stroke:var(--hi);stroke-linecap:round;stroke-dasharray:282.7}
+#scene .rg .fg{transition:stroke-dashoffset 1s linear,stroke .3s}
+.tn{font-size:3em;line-height:1;font-weight:800;color:var(--pen);font-variant-numeric:tabular-nums;z-index:1}
+.timer.low .fg{stroke:var(--pen)}.timer.low .tn{animation:pulse .5s infinite}
+@media (prefers-reduced-motion:reduce){.fl,.sp,.timer.low .tn{animation:none}}
+</style>
+</head>
+<body>
+<script src="../../../../main.js"></script>
+<script>
+const X='<i>x</i>',P=(c,p,k)=>c+X+(p===''?'':`<sup${k?` class="${k}"`:''}>${p}</sup>`);
+const BD=(n,c,id)=>`<b class="bd hid" id="${id}" style="background:${c}">${n}</b>`;
+const TIM=id=>`<div class="timer hid" id="${id}"><div class="rg"><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="45"/><circle class="fg" cx="50" cy="50" r="45" style="stroke-dashoffset:0"/></svg><div class="tn">30</div></div><div>ثانية للحل — خد وقتك</div></div>`;
+const H1=110.2,H2=435;
+/* توقيت الصوت (m:ss.s) → توقيت التايم لاين مع إضافة وقفتي التايمر */
+const t=s=>{if(typeof s==='string'){const[a,b]=s.split(':');s=+a*60+ +b}return Math.round((s>H2?s+60:s>H1?s+30:s)*1000)};
+function tmr(sc,id,n){const e=sc.querySelector(id);if(!e)return;e.querySelector('.tn').textContent=n;e.querySelector('.fg').style.strokeDashoffset=(282.7*(1-n/30)).toFixed(1);e.classList.toggle('low',n>0&&n<=5)}
+const ticks=(id,h)=>Array.from({length:30},(_,i)=>({t:h+(i+1)*1000,run:sc=>tmr(sc,id,29-i)}));
+
+function arc(from,to,dur=1100){
+  const sc=document.querySelector('#scene'),a=sc.querySelector(from),b=sc.querySelector(to);
+  if(!a||!b)return;
+  const ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect(),cs=getComputedStyle(a);
+  const k=a.offsetWidth?ra.width/a.offsetWidth:1,fa=parseFloat(cs.fontSize)*k,fb=parseFloat(getComputedStyle(b).fontSize)*k,s=fb/fa;
+  const g=a.cloneNode(true);g.removeAttribute('id');g.classList.remove('hid');
+  Object.assign(g.style,{position:'fixed',left:ra.left+'px',top:ra.top+'px',margin:0,fontSize:fa+'px',lineHeight:1,zIndex:5,transition:'none'});
+  sc.append(g);
+  const dx=rb.left+rb.width/2-ra.left-ra.width/2,dy=rb.top+rb.height/2-ra.top-fa/2;
+  a.classList.add('dim');
+  const an=g.animate([{transform:'translate(0,0) scale(1)'},{transform:`translate(${dx/2}px,${dy/2-70}px) scale(${1+s/2})`,offset:.5},{transform:`translate(${dx}px,${dy}px) scale(${s})`}],
+    {duration:sc.classList.contains('instant')?0:dur,easing:'ease-in-out',fill:'forwards'});
+  an.onfinish=()=>{g.remove();b.classList.remove('hid')};
+}
+function activateChapter(sc,id){
+  sc.querySelectorAll('.chapter').forEach(el=>el.classList.remove('active'));
+  const next=sc.querySelector('#'+id);if(next)next.classList.add('active');
+  const fit=sc.querySelector('#fit');
+  if(fit&&fit.offsetWidth){const k=Math.min(1.6,sc.clientWidth*.94/fit.offsetWidth,sc.clientHeight*.84/fit.offsetHeight);fit.style.transform=`scale(${k})`}
+}
+const fly=(a,b,s)=>[{t:t(s),run:()=>arc(a,b)},{t:t(s)+1150,fx:[b,'bounce']}];
+const go=id=>({run:sc=>activateChapter(sc,id)});
+const pop=(id,fx='pop')=>({show:id,fx:[id,fx]});
+const W=s=>s.split(' ').map((w,i)=>`<span class="w" style="--i:${i}">${w}</span>`).join(' ');
+const sparks=[...Array(10)].map((_,i)=>`<b class="sp" style="left:${(i*37+8)%96}%;top:${(i*53+6)%92}%;animation-delay:${(i*.37).toFixed(2)}s"></b>`).join('');
+const floats=['+','−','f′(x)','x²','3x','7','g′+h′','x⁵'].map((s,i)=>`<span class="fl" style="left:${(i*29)%110-8}%;top:${(i*41)%100}%;animation-delay:${i*.6}s">${s}</span>`).join('');
+
+/* تذكير: صلِّ على النبي — سهم من الشمال كل دقيقة */
+addEventListener('DOMContentLoaded',()=>{
+  const st=document.querySelector('#stage');if(!st)return;
+  const el=document.createElement('div');el.className='salat';el.textContent='صَلِّ عَلَى النَّبِيِّ ﷺ';st.append(el);
+  const show=()=>{if(document.hidden)return;el.animate([{transform:'translateX(-120%)'},{transform:'translateX(0)',offset:.12},{transform:'translateX(.6em)',offset:.16},{transform:'translateX(0)',offset:.2},{transform:'translateX(0)',offset:.9},{transform:'translateX(-120%)'}],{duration:6500,easing:'ease-out'})};
+  setInterval(show,60000);
+});
+
+Lesson({
+  title:{ar:'قاعدة المجموع',en:'Sum Rule'},
+  scenes:[{
+    title:{ar:'قاعدة المجموع',en:'The Sum Rule'},
+    audio:'Sum Rule',
+    dur:645000,
+    say:'شرح صوتي كامل باللهجة المصرية لقاعدة المجموع (Sum Rule) مع مراجعة قاعدة القوة وتمرينين بوقفة تايمر.',
+    stage:`
+<!-- مقدمة -->
+<div class="chapter one active" id="w">${floats}
+  <div class="hello hid" id="wHi">السلام عليكم</div>
+  <div class="badge hid" id="wNo">المحاضرة الثانية | Lecture 2</div>
+  <div class="title hid" id="wT">قاعدة المجموع</div>
+  <div class="title hid" id="wE" style="font-size:2.4em;color:var(--teal)">The Sum Rule</div>
+  <div class="cap hid" id="wC">التفاضل | Differentiation</div>
+</div>
+
+<!-- الدعاء -->
+<div class="chapter one" id="d">
+  <div class="dua hid" id="dP">${sparks}
+    <div class="lbl hid" id="dL">دعاء قبل الدرس | Before we start</div>
+    <div class="dl hid" id="du1">${W('﴿ رَبِّ اشْرَحْ لِي صَدْرِي')}</div>
+    <div class="dl hid" id="du2">${W('وَيَسِّرْ لِي أَمْرِي')}</div>
+    <div class="dl hid" id="du3">${W('وَاحْلُلْ عُقْدَةً مِنْ لِسَانِي')}</div>
+    <div class="dl hid" id="du4">${W('يَفْقَهُوا قَوْلِي ﴾')}</div>
+  </div>
+</div>
+
+<!-- مراجعة قاعدة القوة -->
+<div class="chapter" id="r1">
+  <div class="cap">مراجعة الدرس اللي فات | Power Rule</div>
+  <div class="L">
+    <div class="pill s1 hid" id="rT">قاعدة القوة | Power Rule</div>
+    <div class="eq md hid" id="rI">f(${X}) = ${X}<sup class="n" id="rN">n</sup></div>
+    <div class="eq md hid" id="rO">f′(${X}) = <span id="rC" class="n hid ib">n·</span>${X}<sup class="m"><span id="rP" class="hid ib">n</span><span id="rM" class="hid ib"> − 1</span></sup></div>
+  </div>
+  <div class="R">
+    <div class="card hid" id="rEx"><div class="cap">لو فيه معامل</div><div class="eq sm">${P(6,4)} → <span class="k n">4×6</span>${P('',3,'m')}</div></div>
+    <div class="row hid" id="rS1"><span class="pill s1">1 — ننزّل الأس</span></div>
+    <div class="row hid" id="rS2"><span class="pill s2">2 — نطرح 1</span></div>
+  </div>
+</div>
+
+<!-- ثلاث حالات خاصة -->
+<div class="chapter one" id="sp">
+  <div class="cap">تلات حالات خاصة | 3 Special Cases</div>
+  <div class="row" style="flex-wrap:nowrap;align-items:stretch;gap:1.2em">
+    <div class="card hid" id="c1"><div class="pill s1">x لوحدها</div><div class="eq md" style="margin:.3em 0">f(${X}) = ${X}</div><div class="eq md hid" id="c1r">f′(${X}) = <span class="hl">1</span></div></div>
+    <div class="card hid" id="c2"><div class="pill s2">رقم ثابت</div><div class="eq md" style="margin:.3em 0">f(${X}) = 7</div><div class="eq md hid" id="c2r">f′(${X}) = <span class="hl">0</span></div></div>
+    <div class="card hid" id="c3"><div class="pill s3">معامل × x</div><div class="eq md" style="margin:.3em 0">f(${X}) = 5<span id="c3x" class="ib">${X}</span></div><div class="eq md hid" id="c3r">f′(${X}) = <span class="hl">5</span></div><div class="cap hid" id="c3n">الـ x أسها 1 فبتتشال</div></div>
+  </div>
+</div>
+
+<!-- تمرين 1 -->
+<div class="chapter" id="q1">
+  <div class="cap">جرّب بنفسك | Your turn</div>
+  <div class="L"><div class="card">
+    <div class="qr hid" id="q1a"><span>1)</span><span class="eq sm">${P('',9)}</span></div>
+    <div class="qr hid" id="q1b"><span>2)</span><span class="eq sm">${P(6,4)}</span></div>
+    <div class="qr hid" id="q1c"><span>3)</span><span class="eq sm">9${X}</span></div>
+    <div class="qr hid" id="q1d"><span>4)</span><span class="eq sm">100</span></div>
+  </div></div>
+  <div class="R">
+    <div class="pill s1 hid" id="q1p">حل الأربع مسائل دول</div>
+    <div class="card hid" id="q1n">غلطت في واحدة؟ ارجع للدرس اللي فات — هتلاقيه في وصف الفيديو</div>
+    ${TIM('q1t')}
+  </div>
+</div>
+
+<!-- إجابات 1 -->
+<div class="chapter one" id="a1">
+  <div class="cap">الإجابات | Answers</div>
+  <div class="card"><div class="tbl2 eq md" style="grid-template-columns:auto auto auto auto auto;justify-items:center">
+    <span class="hid" id="a1q1">${P('',9)}</span><span class="op">→</span><span class="hid" id="a1w1"><span class="n">9</span>·${P('',`9 − 1`,'m')}</span><span class="op">=</span><span class="hid" id="a1r1"><span class="hl">${P(9,8)}</span></span>
+    <span class="hid" id="a1q2">${P(6,4)}</span><span class="op">→</span><span class="hid" id="a1w2"><span class="n k2">4×6</span>·${P('',`4 − 1`,'m')}</span><span class="op">=</span><span class="hid" id="a1r2"><span class="hl">${P(24,3)}</span></span>
+    <span class="hid" id="a1q3">9${X}</span><span class="op">→</span><span class="hid" id="a1w3">9<span class="fx-strike">${X}</span></span><span class="op">=</span><span class="hid" id="a1r3"><span class="hl">9</span></span>
+    <span class="hid" id="a1q4">100</span><span class="op">→</span><span class="hid" id="a1w4">ثابت</span><span class="op">=</span><span class="hid" id="a1r4"><span class="hl">0</span></span>
+  </div></div>
+  <div class="card hid" id="aT"><span id="aTx"></span></div>
+</div>
+
+<!-- مشكلة النهاردة -->
+<div class="chapter one" id="p">
+  <div class="cap">مشكلة النهاردة | Today's Problem</div>
+  <div class="row" style="gap:1.4em">
+    <div class="card hid" id="pOne"><div class="cap">حد واحد (term)</div><div class="eq sm">${P(6,4)}</div></div>
+    <div class="card hid" id="pMore"><div class="cap">أكتر من term</div><div class="eq sm">${P('',5)} + ${P('',3)}</div></div>
+  </div>
+  <div class="eq md hid" id="pE" style="margin-top:.9em">f(${X}) = <span class="tm" id="pt1">${P(3,4)}${BD(1,'var(--pen)','pb1')}</span> <span class="op">+</span> <span class="tm" id="pt2">${P(2,2)}${BD(2,'var(--teal)','pb2')}</span> <span class="op">−</span> <span class="tm" id="pt3">5${X}${BD(3,'var(--ink)','pb3')}</span> <span class="op">+</span> <span class="tm" id="pt4">7${BD(4,'#8a6d00','pb4')}</span></div>
+  <div class="pill s1 hid" id="pCnt">4 حدود | 4 terms</div>
+</div>
+
+<!-- الفكرة -->
+<div class="chapter one" id="m">
+  <div class="cap">الفكرة | The Idea</div>
+  <div class="eq md sumrow" id="mR"><span class="tm">${P(3,4)}</span><span class="op">+</span><span class="tm">${P(2,2)}</span><span class="op">−</span><span class="tm">5${X}</span><span class="op">+</span><span class="tm">7</span></div>
+  <div class="pill s1 hid" id="mS1">1 — فاضل كل حد لوحده | Differentiate each term separately</div>
+  <div class="pill s2 hid" id="mS2">2 — اجمع النتائج | Then add the results</div>
+  <div class="row"><span class="pill s3 hid" id="mP">+ ← اجمع</span><span class="pill s3 hid" id="mM">− ← اطرح</span></div>
+</div>
+
+<!-- القاعدة -->
+<div class="chapter one" id="ru">
+  <div class="cap">قاعدة المجموع | The Sum Rule</div>
+  <div class="eq md hid" id="uA">f(${X}) = <span class="ib" id="uGs">g(${X})</span> <span class="sw ib">+</span> <span class="ib" id="uHs">h(${X})</span></div>
+  <div class="eq md hid" id="uB">f′(${X}) = <span class="ib n hid" id="uG">g′(${X})</span> <span class="sw ib hid" id="uO">+</span> <span class="ib m hid" id="uH">h′(${X})</span></div>
+  <div class="card hid" id="uM">نفس الكلام مع الطرح | Same with subtraction</div>
+</div>
+
+<!-- مثال 1 -->
+<div class="chapter one" id="e1">
+  <div class="cap">مثال 1 | Example 1</div>
+  <div class="eq md hid" id="e1F" style="margin-top:.5em">f(${X}) = <span class="tm">${X}<sup class="n" id="e1n">5</sup>${BD(1,'var(--pen)','e1b1')}</span> <span class="op" id="e1o">+</span> <span class="tm">${X}<sup class="n" id="e1m">3</sup>${BD(2,'var(--teal)','e1b2')}</span></div>
+  <div class="eq md hid" id="e1D">f′(${X}) = <span class="n ib hid" id="e1c">5</span>${X}<sup class="m ib hid" id="e1p">5 − 1</sup> <span class="op hid" id="e1s">؟</span> <span class="n ib hid" id="e1c2">3</span>${X}<sup class="m ib hid" id="e1p2">3 − 1</sup></div>
+  <div class="row"><span class="pill s1 hid" id="e1R1">+ ← اجمع</span><span class="pill s2 hid" id="e1R2">− ← اطرح</span></div>
+  <div class="card hid" id="e1Z"><div class="cap">المشتقة النهائية</div><div class="eq md">f′(${X}) = <span class="n">5</span>${P('',4,'m')} + <span class="n">3</span>${P('',2,'m')}</div></div>
+</div>
+
+<!-- مثال 2 -->
+<div class="chapter one" id="e2">
+  <div class="cap">مثال 2 — أربع حدود | Example 2</div>
+  <div class="tbl eq md" style="margin-top:.5em">
+    <span class="tm r1 hid" id="E1">3${X}<sup class="n" id="n1">4</sup>${BD(1,'var(--pen)','e2b1')}</span><span class="op r1 hid">+</span>
+    <span class="tm r1 hid" id="E2">2${X}<sup class="n" id="n2">2</sup>${BD(2,'var(--teal)','e2b2')}</span><span class="op r1 hid" id="O2">−</span>
+    <span class="tm r1 hid" id="E3">5<span id="x3">${X}</span>${BD(3,'var(--ink)','e2b3')}</span><span class="op r1 hid">+</span>
+    <span class="tm r1 hid" id="E4">7${BD(4,'#8a6d00','e2b4')}</span>
+    <span class="ib hid" id="d1"><span class="n ib hid" id="d1c">4×3</span>${X}<sup class="m ib hid" id="d1p">4 − 1</sup></span><span></span>
+    <span class="ib hid" id="d2"><span class="n ib hid" id="d2c">2×2</span>${X}<sup class="m ib hid" id="d2p">2 − 1</sup></span><span></span>
+    <span class="ib hid" id="d3">−5${X}<sup class="m">1 − 1</sup></span><span></span>
+    <span class="ib hid" id="d4">0</span>
+  </div>
+  <div class="card hid" id="e2N">الإشارة بتروح مع الرقم — الحد التالت هو <b class="n">−5x</b></div>
+  <div class="card hid" id="e2Z"><div class="eq md">f′(${X}) = <span class="ib hid n" id="f1">12${P('',3,'m')}</span> <span class="ib hid" id="f2">+ <span class="n">4</span>${X}</span> <span class="ib hid" id="f3">− <span class="n">5</span></span></div></div>
+</div>
+
+<!-- ملحوظة -->
+<div class="chapter one" id="nt">
+  <div class="cap">ملحوظة مهمة | Important</div>
+  <div class="row" style="gap:1.4em;align-items:stretch">
+    <div class="card hid" id="nA"><div class="eq md">+ &nbsp; −</div><div class="pill s2">القاعدة بتشتغل</div></div>
+    <div class="card hid" id="nB"><div class="eq md"><span class="red nx ib">×</span> &nbsp; <span class="red nx ib">÷</span></div><div class="pill s1">مش بتشتغل</div></div>
+  </div>
+  <div class="card hid" id="nC">لو فيه ضرب أو قسمة فدي قوانين تانية — هناخدها في الدروس الجاية</div>
+</div>
+
+<!-- تمرين 2 -->
+<div class="chapter" id="q2">
+  <div class="cap">جرّب بنفسك | Your turn</div>
+  <div class="L"><div class="card">
+    <div class="qr hid" id="q2a"><span>1)</span><span class="eq sm">${P('',6)} + ${P('',2)}</span></div>
+    <div class="qr hid" id="q2b"><span>2)</span><span class="eq sm">${P(4,3)} − ${P(6,2)}</span></div>
+    <div class="qr hid" id="q2c"><span>3)</span><span class="eq sm">${P(2,5)} − ${P(3,2)} + ${X} − 8</span></div>
+  </div></div>
+  <div class="R"><div class="pill s1 hid" id="q2p">جرب التلات مسائل دول</div>${TIM('q2t')}</div>
+</div>
+
+<!-- إجابات 2 -->
+<div class="chapter one" id="a2">
+  <div class="cap">الإجابات | Answers</div>
+  <div class="card"><div class="tbl2 eq md">
+    <span class="q hid" id="a2q1"><span id="s11" class="ib">${P('',6)}</span> + <span id="s12" class="ib">${P('',2)}</span> →</span><span class="hid" id="a21">${P(6,5,'m')}</span><span class="hid" id="a22"> + 2${X}</span><span></span><span></span>
+    <span class="q hid" id="a2q2"><span id="s21" class="ib">${P(4,3)}</span> − <span id="s22" class="ib">${P(6,2)}</span> →</span><span class="hid" id="a23">${P(12,2,'m')}</span><span class="hid" id="a24"> − 12${X}</span><span></span><span></span>
+    <span class="q hid" id="a2q3"><span id="s31" class="ib">${P(2,5)}</span> − <span id="s32" class="ib">${P(3,2)}</span> + <span id="s33" class="ib">${X}</span> − <span id="s34" class="ib">8</span> →</span><span class="hid" id="a25">${P(10,4,'m')}</span><span class="hid" id="a26"> − 6${X}</span><span class="hid" id="a27"> + 1</span><span class="hid" id="a28"> + 0</span>
+  </div></div>
+</div>
+
+<!-- المراجعة النهائية -->
+<div class="chapter one" id="fr">
+  <div class="cap">المراجعة النهائية | Final Review</div>
+  <div class="eq md hid" id="fA">f(${X}) = g(${X}) + h(${X})</div>
+  <div class="eq md hid" id="fB">f′(${X}) = <span class="n">g′(${X})</span> + <span class="m">h′(${X})</span></div>
+  <div class="card hid" id="fC">أكتر من حد؟ فاضل كل حد لوحده، وبعدين اجمع أو اطرح</div>
+  <div class="title hid" id="fT" style="font-size:2.6em;color:var(--teal)">The Sum Rule</div>
+  <div class="cap hid" id="fD">يا رب تكون فهمته</div>
+  <div class="pill s1 hid" id="fE" style="font-size:1.6em">وبالتوفيق</div>
+</div>
+`,
+    steps:[
+      /* ===== المقدمة ===== */
+      {t:t('0:01.1'),...pop('#wHi','zoom')},
+      {t:t('0:03.4'),show:'#wNo,#wT',fx:['#wT','drop']},
+      {t:t('0:05.6'),...pop('#wE','slide')},
+      {t:t('0:07.0'),...pop('#wC','drop')},
+
+      /* ===== الدعاء ===== */
+      {t:t('0:09.3'),...go('d')},
+      {t:t('0:09.4'),show:'#dP,#dL',fx:['#dP','zoom']},
+      {t:t('0:10.6'),...pop('#du1','words')},
+      {t:t('0:11.5'),...pop('#du2','words')},
+      {t:t('0:12.3'),...pop('#du3','words')},
+      {t:t('0:13.5'),...pop('#du4','words')},
+      {t:t('0:14.4'),fx:['#dP','glow']},
+
+      /* ===== مراجعة قاعدة القوة ===== */
+      {t:t('0:15.0'),...go('r1')},
+      {t:t('0:18.8'),...pop('#rT','drop')},
+      {t:t('0:23.3'),...pop('#rI')},
+      {t:t('0:25.2'),...pop('#rO')},
+      {t:t('0:28.3'),run:()=>arc('#rN','#rC')},
+      {t:t('0:31.0'),...pop('#rEx','slide')},
+      {t:t('0:34.4'),text:['#rEx .k','24'],hl:'#rEx .k',fx:['#rEx .k','pop']},
+      {t:t('0:38.9'),show:'#rP'},
+      {t:t('0:39.8'),...pop('#rM','drop')},
+      {t:t('0:42.5'),...pop('#rS1','slide')},
+      {t:t('0:44.6'),...pop('#rS2','slide')},
+
+      /* ===== الحالات الخاصة ===== */
+      {t:t('0:46.9'),...go('sp')},
+      {t:t('0:51.5'),...pop('#c1','slide')},
+      {t:t('0:55.8'),...pop('#c1r')},
+      {t:t('1:00.4'),...pop('#c2','slide')},
+      {t:t('1:06.0'),...pop('#c2r')},
+      {t:t('1:08.7'),...pop('#c3','slide')},
+      {t:t('1:13.6'),fx:['#c3x','strike']},
+      {t:t('1:15.0'),...pop('#c3r')},
+      {t:t('1:16.6'),...pop('#c3n','drop')},
+
+      /* ===== تمرين 1 + وقفة 30 ثانية ===== */
+      {t:t('1:19.9'),...go('q1')},
+      {t:t('1:20.5'),...pop('#q1p','drop')},
+      {t:t('1:28.9'),...pop('#q1a','slide')},
+      {t:t('1:30.2'),...pop('#q1b','slide')},
+      {t:t('1:31.8'),...pop('#q1c','slide')},
+      {t:t('1:33.4'),...pop('#q1d','slide')},
+      {t:t('1:40.3'),...pop('#q1n')},
+      {t:t(H1),show:'#q1t',run:sc=>tmr(sc,'#q1t',30),hold:30000},
+      ...ticks('#q1t',t(H1)),
+
+      /* ===== إجابات 1 ===== */
+      {t:t('1:53.47'),...go('a1')},
+      {t:t('1:53.5'),...pop('#a1q1','slide')},
+      {t:t('1:55.6'),...pop('#a1w1','drop')},
+      {t:t('1:59.0'),...pop('#a1r1')},
+      {t:t('2:00.8'),...pop('#a1q2','slide')},
+      {t:t('2:03.9'),...pop('#a1w2','drop')},
+      {t:t('2:06.3'),hl:'.k2',fx:['.k2','pulse']},
+      {t:t('2:08.6'),...pop('#a1r2')},
+      {t:t('2:13.7'),...pop('#a1q3','slide')},
+      {t:t('2:16.1'),text:['#aTx','القانون: معامل × x ← بنشيل الـ x ويفضل المعامل'],show:'#aT',fx:['#aT','drop']},
+      {t:t('2:21.0'),...pop('#a1w3','drop')},
+      {t:t('2:26.5'),...pop('#a1r3')},
+      {t:t('2:29.3'),...pop('#a1q4','slide')},
+      {t:t('2:31.7'),...pop('#a1w4','drop')},
+      {t:t('2:33.6'),...pop('#a1r4')},
+      {t:t('2:35.0'),text:['#aTx','مفيش x ← مفيش حاجة بتغير الدالة ← الناتج صفر'],fx:['#aT','pop']},
+
+      /* ===== مشكلة النهاردة ===== */
+      {t:t('2:45.4'),...go('p')},
+      {t:t('2:48.6'),...pop('#pOne','drop')},
+      {t:t('2:52.4'),...pop('#pMore','drop')},
+      {t:t('2:57.6'),...pop('#pE')},
+      {t:t('3:02.7'),fx:['#pt1','flash']},{t:t('3:03.8'),fx:['#pt2','flash']},
+      {t:t('3:04.9'),fx:['#pt3','flash']},{t:t('3:05.8'),fx:['#pt4','flash']},
+      {t:t('3:06.6'),...pop('#pb1','drop')},{t:t('3:07.0'),...pop('#pb2','drop')},
+      {t:t('3:07.4'),...pop('#pb3','drop')},{t:t('3:07.8'),...pop('#pb4','drop')},
+      {t:t('3:08.2'),...pop('#pCnt','zoom')},
+
+      /* ===== الفكرة ===== */
+      {t:t('3:08.9'),...go('m')},
+      {t:t('3:12.0'),run:sc=>sc.querySelector('#mR').classList.add('split'),fx:['#mR .tm','bounce']},
+      {t:t('3:20.7'),...pop('#mS1','slide')},
+      {t:t('3:31.2'),run:sc=>sc.querySelector('#mR').classList.remove('split'),...pop('#mS2','slide')},
+      {t:t('3:35.0'),...pop('#mP','drop')},
+      {t:t('3:36.6'),...pop('#mM','drop')},
+
+      /* ===== القاعدة ===== */
+      {t:t('3:39.4'),...go('ru')},
+      {t:t('3:39.6'),...pop('#uA')},
+      {t:t('3:50.2'),...pop('#uB')},
+      {t:t('3:52.7'),run:()=>arc('#uGs','#uG')},
+      {t:t('3:54.0'),...pop('#uO','drop')},
+      {t:t('3:54.3'),run:()=>arc('#uHs','#uH')},
+      {t:t('3:56.2'),...pop('#uM','drop')},
+      {t:t('3:56.8'),text:['.sw','−'],fx:['.sw','flip']},
+
+      /* ===== مثال 1 ===== */
+      {t:t('3:58.3'),...go('e1')},
+      {t:t('4:01.3'),...pop('#e1F')},
+      {t:t('4:06.0'),...pop('#e1b1','drop')},
+      {t:t('4:10.0'),...pop('#e1b2','drop')},
+      {t:t('4:13.5'),...pop('#e1D')},
+      {t:t('4:18.3'),run:()=>arc('#e1n','#e1c')},
+      {t:t('4:19.9'),show:'#e1p'},
+      {t:t('4:21.8'),text:['#e1p','4'],fx:['#e1p','pop']},
+      {t:t('4:24.5'),run:()=>arc('#e1m','#e1c2')},
+      {t:t('4:26.8'),show:'#e1p2'},
+      {t:t('4:32.5'),text:['#e1p2','2'],fx:['#e1p2','pop']},
+      {t:t('4:37.8'),...pop('#e1s')},
+      {t:t('4:40.5'),hl:'#e1o',fx:['#e1o','pulse']},
+      {t:t('4:41.6'),...pop('#e1R1','drop')},
+      {t:t('4:42.6'),...pop('#e1R2','drop')},
+      {t:t('4:45.6'),text:['#e1s','+'],fx:['#e1s','flip']},
+      {t:t('4:54.1'),...pop('#e1Z','zoom')},
+
+      /* ===== مثال 2 ===== */
+      {t:t('4:57.7'),...go('e2')},
+      {t:t('4:59.0'),show:'.r1',fx:['.r1','drop']},
+      {t:t('5:09.8'),...pop('#e2b1','drop')},{t:t('5:10.5'),...pop('#e2b2','drop')},
+      {t:t('5:11.1'),...pop('#e2b3','drop')},{t:t('5:11.7'),...pop('#e2b4','drop')},
+      {t:t('5:14.3'),hl:'#E1'},
+      {t:t('5:14.5'),...pop('#d1')},
+      {t:t('5:16.9'),run:()=>arc('#n1','#d1c')},
+      {t:t('5:18.3'),show:'#d1p'},
+      {t:t('5:19.4'),text:['#d1c','12'],fx:['#d1c','pop']},
+      {t:t('5:19.4'),text:['#d1p','3'],fx:['#d1p','pop']},
+      {t:t('5:21.8'),unhl:'#E1',hl:'#E2'},
+      {t:t('5:22.0'),...pop('#d2')},
+      {t:t('5:24.3'),run:()=>arc('#n2','#d2c')},
+      {t:t('5:29.4'),show:'#d2p'},
+      {t:t('5:31.8'),text:['#d2c','4'],fx:['#d2c','pop']},
+      {t:t('5:31.8'),text:['#d2p','']},
+      {t:t('5:35.2'),unhl:'#E2',hl:'#E3,#O2'},
+      {t:t('5:38.5'),...pop('#e2N','drop')},
+      {t:t('5:47.6'),text:['#x3','<i>x</i><sup class="n">1</sup>'],fx:['#x3','pop']},
+      {t:t('5:50.2'),...pop('#d3')},
+      {t:t('5:53.8'),text:['#d3','−5<i>x</i><sup class="m">0</sup>'],fx:['#d3','pop']},
+      {t:t('6:00.5'),text:['#d3','−5'],fx:['#d3','pop']},
+      {t:t('6:03.5'),unhl:'#E3,#O2',hl:'#E4'},
+      {t:t('6:07.5'),...pop('#d4')},
+      {t:t('6:11.5'),unhl:'#E4',hide:'#e2N',...pop('#e2Z','zoom')},
+      {t:t('6:17.2'),run:()=>arc('#d1','#f1')},
+      {t:t('6:19.4'),run:()=>arc('#d2','#f2')},
+      {t:t('6:20.5'),run:()=>arc('#d3','#f3')},
+      {t:t('6:21.9'),fx:['#d4','strike']},
+      {t:t('6:26.6'),fx:['#e2Z','bounce']},
+
+      /* ===== ملحوظة ===== */
+      {t:t('6:30.3'),...go('nt')},
+      {t:t('6:30.6'),...pop('#nA','zoom')},
+      {t:t('6:34.6'),...pop('#nB','slide')},
+      {t:t('6:35.8'),fx:['#nB','shake']},
+      {t:t('6:36.6'),fx:['.nx','strike']},
+      {t:t('6:38.9'),...pop('#nC','drop')},
+
+      /* ===== تمرين 2 + وقفة 30 ثانية ===== */
+      {t:t('6:41.3'),...go('q2')},
+      {t:t('6:52.0'),...pop('#q2a','slide')},
+      {t:t('6:55.6'),...pop('#q2b','slide')},
+      {t:t('7:00.2'),...pop('#q2c','slide')},
+      {t:t('7:08.6'),...pop('#q2p','drop')},
+      {t:t(H2),show:'#q2t',run:sc=>tmr(sc,'#q2t',30),hold:30000},
+      ...ticks('#q2t',t(H2)),
+
+      /* ===== إجابات 2 ===== */
+      {t:t('7:16.32'),...go('a2')},
+      {t:t('7:18.6'),...pop('#a2q1','slide')},
+      ...fly('#s11','#a21','7:26.5'),
+      ...fly('#s12','#a22','7:34.2'),
+      {t:t('7:38.0'),fx:['#a2q1','bounce']},
+      {t:t('7:38.9'),...pop('#a2q2','slide')},
+      ...fly('#s21','#a23','7:50.5'),
+      ...fly('#s22','#a24','8:18.0'),
+      {t:t('8:25.7'),fx:['#a2q2','bounce']},
+      {t:t('8:29.7'),...pop('#a2q3','slide')},
+      ...fly('#s31','#a25','8:43.0'),
+      ...fly('#s32','#a26','8:48.9'),
+      ...fly('#s33','#a27','8:52.0'),
+      ...fly('#s34','#a28','8:54.9'),
+      {t:t('8:56.2'),fx:['#a28','strike']},
+      {t:t('8:58.6'),fx:['#a2q3','bounce']},
+
+      /* ===== المراجعة النهائية ===== */
+      {t:t('9:03.1'),...go('fr')},
+      {t:t('9:11.4'),...pop('#fA')},
+      {t:t('9:14.9'),...pop('#fB')},
+      {t:t('9:23.2'),...pop('#fC','drop')},
+      {t:t('9:34.4'),fx:['#fC','pulse']},
+      {t:t('9:36.8'),...pop('#fT','zoom')},
+      {t:t('9:40.0'),...pop('#fD','drop')},
+      {t:t('9:43.3'),...pop('#fE','zoom'),run:sc=>sc.querySelector('#fE').style.boxShadow='0 0 1.2em var(--hi)'}
+    ]
+  }]
+});
+</script>
+</body>
+</html>
