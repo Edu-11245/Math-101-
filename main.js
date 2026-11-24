@@ -10,8 +10,6 @@ const IC={prev:['M6 5v14M19 5L9 12l10 7z'],next:['M18 5v14M5 5l10 7L5 19z'],play
   vol2:['M11 5L6 9H3v6h3l5 4zM15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13']};
 const icon=n=>`<svg viewBox="0 0 24 24" fill="${IC[n][1]?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="${IC[n][0]}"/></svg>`;
 const set=(el,n)=>el.innerHTML=icon(n);
-
-/* ---------- الصفحة الرئيسية ---------- */
 function home(){
   document.body.classList.add('home');
   const list=window.LESSON_LIST||[],g={};
@@ -21,8 +19,6 @@ function home(){
     ls.map(l=>`<a href="Subjects/${s}/${u}/${l.lesson}/lesson.html">${l.title}</a>`).join('')+'</div>').join('')+'</section>').join('')
     :'<p>مفيش دروس لسه. ضيف سطر في Subjects/list.js</p>');
 }
-
-/* ---------- صفحة الدرس ---------- */
 function player(L){
   document.body.classList.add('player');
   document.body.insertAdjacentHTML('afterbegin',`
@@ -46,7 +42,6 @@ function player(L){
   $$('[data-i]').forEach(b=>set(b,b.dataset.i));set($('#start'),'play');
 
   const A=new Audio();A.preload='auto';
-  /* ---- التحكم في الصوت ---- */
   let vol=1,muted=false;
   try{const v=parseFloat(localStorage.getItem('lessonVol'));if(v>=0&&v<=1)vol=v;muted=localStorage.getItem('lessonMuted')==='1'}catch(e){}
   function applyVol(){
@@ -63,7 +58,6 @@ function player(L){
   const S={i:0,steps:[],k:0,mode:'audio',pos:0,dur:0,end:0,playing:false,rate:1,last:0,ff:false,holds:[],hi:0,off:0,holding:false,hStart:0,hEnd:0,lastSec:-1};
   const N=L.scenes.length;
 
-  /* ---- صوت تيك تك (بدون ملفات) ---- */
   let AC=null,tk=0;
   function beep(){
     try{
@@ -94,9 +88,9 @@ function player(L){
     S.end=Math.max(0,...S.steps.map(s=>s.t))+2500;S.dur=S.end;
     const name=S.sc.audio||`V${pad(i+1)}`;
     let tried=0;
-    A.onerror=()=>{if(!tried++){A.src=`audio/${name}.wav`;A.load();return}S.mode='timer';S.dur=S.sc.dur||S.end;ui()};
+    A.onerror=()=>{if(!tried++&&!/^https?:\/\//i.test(name)){A.src=`audio/${name}.wav`;A.load();return}S.mode='timer';S.dur=S.sc.dur||S.end;ui()};
     A.onloadedmetadata=()=>{if(S.mode==='audio')S.dur=Math.max(A.duration*1000+S.holds.reduce((a,h)=>a+h.d,0),S.end-2000);prog()};
-    A.src=`audio/${name}.mp3`;A.playbackRate=S.rate;A.load();
+    A.src=/^https?:\/\//i.test(name)?name:`audio/${name}.mp3`;A.playbackRate=S.rate;A.load();
     $('#scriptBox').innerHTML=`<b>${name}</b>${S.sc.say||''}`;
     prog();ui();
   }
